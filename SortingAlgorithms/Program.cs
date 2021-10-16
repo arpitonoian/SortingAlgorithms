@@ -16,7 +16,13 @@ namespace SortingAlgorithms
                 arr[i] = rnd.Next(30);
                 Console.Write(arr[i] + " ");
             }
-            Console.WriteLine();
+            if (arraySortedOrNot(arr, arr.Length) != 0)
+            {
+                Console.WriteLine("Array is sorted");
+                Environment.Exit(0);
+            }
+            else
+                Console.WriteLine();
             Console.WriteLine("Select which algorithm you want to perform:\n" +
                               "1.Insertion sort\n" +
                               "2.Bubble sort\n" +
@@ -29,6 +35,7 @@ namespace SortingAlgorithms
             int left_number;
             char right;
             int right_number;
+
             try
             {
                 string input = Console.ReadLine();
@@ -44,10 +51,9 @@ namespace SortingAlgorithms
                         ChooseAlgorithms(i, arr);
                     }
                 }
-               
 
-                else if (input.Length>1)
-                
+                else if (input.Length > 1)
+
                 {
                     for (int i = 0; i < input.Length; i++)
                     {
@@ -64,6 +70,7 @@ namespace SortingAlgorithms
                                     ChooseAlgorithms(j, arr);
                                 }
                             }
+
                             if (input[i] == ',' && count == 0)
                             {
                                 ChooseAlgorithms(left_number, arr);
@@ -74,20 +81,34 @@ namespace SortingAlgorithms
                         }
                     }
                 }
+
                 else if (int.Parse(input) >= 1 && int.Parse(input) <= 5)
                 {
                     ChooseAlgorithms(int.Parse(input), arr);
                 }
             }
+
             catch (Exception ex)
             {
                 Console.WriteLine("Error message is: " + ex.Message);
             }
         }
 
+        static int arraySortedOrNot(int[] arr, int n)
+        {
+            if (n == 1 || n == 0)
+                return 1;
+
+            if (arr[n - 1] < arr[n - 2])
+                return 0;
+
+            return arraySortedOrNot(arr, n - 1);
+        }
+
         static void ChooseAlgorithms(int number, int[] arr)
         {
             var watch = new System.Diagnostics.Stopwatch();
+            var memoryStart = System.GC.GetTotalMemory(true);
             watch.Start();
             switch (number)
             {
@@ -121,6 +142,9 @@ namespace SortingAlgorithms
             }
             watch.Stop();
             Console.WriteLine($"Execution Time: {watch.ElapsedMilliseconds} ms");
+            var memoryEnd = System.GC.GetTotalMemory(true);
+
+            Console.WriteLine("Total Memory: {0}", memoryEnd - memoryStart);
         }
     }
 }
